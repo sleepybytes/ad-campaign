@@ -1,0 +1,10 @@
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+TASK.md
+GLOSSARY.md
+CLAUDE_CODE_PLAN.md
