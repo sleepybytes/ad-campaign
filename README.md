@@ -64,6 +64,8 @@ The LLM provider is fully swappable via environment variable — the pipeline on
 
 **Prompt templates with few-shot examples.** Publisher scores cluster at 7/10 without examples to anchor calibration. I'd move prompts to Jinja2 templates and inject 3–5 annotated brief→score pairs per advertiser category. The annotations become a dataset that improves over time.
 
+**Prompt versioning and A/B testing.** Right now prompts are flat text files with no history and no way to know if a change made things better or worse. I'd version prompts explicitly, run two variants in shadow mode against the same brief, and score outputs with an LLM judge. Without this, any prompt edit is just a guess.
+
 **Feedback loop.** Connect actual campaign performance (CTR, CPA, ROAS) back to the scoring model. Even a simple re-ranker trained on 500 examples would outperform the zero-shot LLM scorer on in-distribution advertisers.
 
 ---
@@ -89,3 +91,5 @@ The LLM provider is fully swappable via environment variable — the pipeline on
 *Ambiguous briefs.* "We help people feel better" has no right answer. The current system makes its best guess and flags `confidence: low`. The better behavior is to ask a clarifying question — but that requires a multi-turn interaction model the single-shot API doesn't support. Deciding where the boundary is between "parse it and flag uncertainty" and "ask before proceeding" is a product question with real UX consequences.
 
 *Scale and retrieval quality.* Embedding-based retrieval solves the context-window problem but introduces a new one: embedding similarity doesn't capture category nuance well. A beauty brand and a wellness brand may be close in embedding space but need completely different publisher mixes. The interesting engineering is in the retrieval layer — hybrid BM25 + dense retrieval, re-ranking, or a dedicated scoring model — not in the LLM call itself.
+
+*The evaluation problem.* This is the thing I keep coming back to. Without a labeled golden set for publisher ranking, an LLM-as-judge setup for creative quality, and online signals from actual campaign performance (CTR, CPA, conversion rate by publisher and persona), you have no idea whether the system is good or getting worse. Building that feedback loop is where the interesting engineering actually lives — and none of it exists yet.
