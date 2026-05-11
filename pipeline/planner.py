@@ -2,7 +2,7 @@ import asyncio
 import json
 import re
 import logging
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from providers.base import LLMClient, LLMMessage
 from prompts import PUBLISHER_SCORER_SYSTEM, CREATIVE_WRITER_SYSTEM
 from app.config import Settings
@@ -247,7 +247,7 @@ async def generate_plan(
 
     return {
         "plan_version": "1.0",
-        "generated_at": datetime.utcnow().isoformat() + "Z",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
         "advertiser_summary": scorer_result.get("advertiser_summary", ""),
         "confidence": scorer_result.get("confidence", "medium"),
         "no_match_reason": scorer_result.get("no_match_reason"),

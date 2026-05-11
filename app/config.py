@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     planner_model: str = "claude-sonnet-4-6"
     parser_max_tokens: int = 800
     planner_max_tokens: int = 4000
-    scorer_max_tokens: int = 2000
+    scorer_max_tokens: int = 3500
     creative_max_tokens: int = 1500
 
     data_dir: str = "data"
